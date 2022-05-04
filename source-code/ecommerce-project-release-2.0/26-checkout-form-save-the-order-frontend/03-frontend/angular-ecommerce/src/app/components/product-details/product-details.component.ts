@@ -13,6 +13,7 @@ import { CartItem } from 'src/app/common/cart-item';
 export class ProductDetailsComponent implements OnInit {
 
   product: Product = new Product();
+  kur: number = 1;
 
   constructor(private productService: ProductService,
               private cartService: CartService,
@@ -38,10 +39,11 @@ export class ProductDetailsComponent implements OnInit {
 
   addToCart() {
 
+    this.kur++;
     console.log(`Adding to cart: ${this.product.name}, ${this.product.unitPrice}`);
     const theCartItem = new CartItem(this.product);
     this.cartService.addToCart(theCartItem);
-    
+
   }
 
 }

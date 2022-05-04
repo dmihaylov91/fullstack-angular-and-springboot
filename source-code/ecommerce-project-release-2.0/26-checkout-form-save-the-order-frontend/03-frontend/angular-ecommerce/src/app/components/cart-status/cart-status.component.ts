@@ -10,6 +10,7 @@ export class CartStatusComponent implements OnInit {
 
   totalPrice: number = 0.00;
   totalQuantity: number = 0;
+  totalQtyNum: number = 0;
 
   constructor(private cartService: CartService) { }
 
@@ -18,6 +19,8 @@ export class CartStatusComponent implements OnInit {
   }
 
   updateCartStatus() {
+
+    this.totalQtyNum = this.cartService.totalQtyNum;
 
     // subscribe to the cart totalPrice
     this.cartService.totalPrice.subscribe(

@@ -19,6 +19,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './components/login/login.component';
 import { LoginStatusComponent } from './components/login-status/login-status.component';
 
+import { OktaAuth } from '@okta/okta-auth-js';
+
+
+
 import {
   OKTA_CONFIG,
   OktaAuthModule,
@@ -32,13 +36,24 @@ import { OrderHistoryComponent } from './components/order-history/order-history.
 import { AuthInterceptorService } from './services/auth-interceptor.service';
 
 const oktaConfig = Object.assign({
-  onAuthRequired: (oktaAuth, injector) => {
+
+  onAuthRequired: (injector) => {
+
     const router = injector.get(Router);
 
+
+
     // Redirect the user to your custom login page
+
     router.navigate(['/login']);
+
   }
+
 }, myAppConfig.oidc);
+
+const oktaAuth = new OktaAuth(oktaConfig);
+
+
 
 const routes: Routes = [
   {path: 'order-history', component: OrderHistoryComponent, canActivate: [ OktaAuthGuard ]},
@@ -81,7 +96,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     OktaAuthModule
   ],
-  providers: [ProductService, { provide: OKTA_CONFIG, useValue: oktaConfig },
+  providers: [ProductService, { provide: OKTA_CONFIG, useValue: {oktaAuth} },
               {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
   bootstrap: [AppComponent]
 })

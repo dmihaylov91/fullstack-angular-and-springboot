@@ -12,6 +12,8 @@ export class CartService {
   totalPrice: Subject<number> = new BehaviorSubject<number>(0);
   totalQuantity: Subject<number> = new BehaviorSubject<number>(0);
 
+  totalQtyNum: number = 0;
+
   constructor() { }
 
   addToCart(theCartItem: CartItem) {
@@ -46,10 +48,11 @@ export class CartService {
 
     let totalPriceValue: number = 0;
     let totalQuantityValue: number = 0;
-
+    this.totalQtyNum = 0;
     for (let currentCartItem of this.cartItems) {
       totalPriceValue += currentCartItem.quantity * currentCartItem.unitPrice;
       totalQuantityValue += currentCartItem.quantity;
+      this.totalQtyNum += currentCartItem.quantity;
     }
 
     // publish the new values ... all subscribers will receive the new data

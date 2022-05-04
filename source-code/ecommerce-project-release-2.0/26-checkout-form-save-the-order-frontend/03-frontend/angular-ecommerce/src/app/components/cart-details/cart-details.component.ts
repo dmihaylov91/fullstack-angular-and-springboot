@@ -12,6 +12,8 @@ export class CartDetailsComponent implements OnInit {
   cartItems: CartItem[] = [];
   totalPrice: number = 0;
   totalQuantity: number = 0;
+  totalQtyNum: number = 0;
+
 
   constructor(private cartService: CartService) { }
 
@@ -20,6 +22,10 @@ export class CartDetailsComponent implements OnInit {
   }
 
   listCartDetails() {
+
+    this.totalQtyNum = this.cartService.totalQtyNum;
+
+    this.cartService.totalQuantity.subscribe(value => this.totalQtyNum = value);
 
     // get a handle to the cart items
     this.cartItems = this.cartService.cartItems;
@@ -30,7 +36,7 @@ export class CartDetailsComponent implements OnInit {
     );
 
     // subscribe to the cart totalQuantity
-    this.cartService.totalQuantity.subscribe( 
+    this.cartService.totalQuantity.subscribe(
       data => this.totalQuantity = data
     );
 

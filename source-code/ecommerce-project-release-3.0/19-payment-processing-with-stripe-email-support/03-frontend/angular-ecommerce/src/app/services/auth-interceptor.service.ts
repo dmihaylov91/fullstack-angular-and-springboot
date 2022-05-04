@@ -1,6 +1,7 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { OktaAuthService } from '@okta/okta-angular';
+import { Inject, Injectable } from '@angular/core';
+import { OktaAuthStateService, OKTA_AUTH } from '@okta/okta-angular';
+import { OktaAuth } from '@okta/okta-auth-js';
 import { from, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -9,7 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthInterceptorService implements HttpInterceptor {
 
-  constructor(private oktaAuth: OktaAuthService) { }
+  constructor(@Inject(OKTA_AUTH) private oktaAuth: OktaAuth) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return from(this.handleAccess(request, next));
