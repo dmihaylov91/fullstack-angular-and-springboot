@@ -3,8 +3,16 @@
 <div class="main-content">
     <div class="section-content section-content-p30">
         <div class="container-fluid">
+            <div class="col-md-3">
+                <div class="input-space">
+                    <select (change)="changeSeason($event.target.value)">
+                        <option *ngFor="let s of seasons" [ngValue]="s" [selected]="s ===season">
+                            {{ s }}
+                        </option>
+                    </select>
+                </div>
+            </div>
             <div class="row">
-
                 <!-- loop over the collection of products -->
                 <div *ngFor="let tempPlayer of players" class="col-md-3">
 

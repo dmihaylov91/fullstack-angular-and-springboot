@@ -11,24 +11,27 @@ import {forkJoin} from 'rxjs';
 export class CskaTeamComponent implements OnInit {
 
   players: Player[] = [];
+  seasons : number[] = [];
+  season: number = 2021;
   storage: Storage = sessionStorage;
 
   constructor(private footballApiService: FootballApiServiceService) {}
 
   ngOnInit(): void {
+    this.getSeasons();
     this.getPlayers();
   }
 
    getPlayers(): void
    {
-     const data = JSON.parse(this.storage.getItem('players'));
+     const data = JSON.parse(this.storage.getItem('players_' + this.season));
      if (data != null)
      {
        this.players = data;
      }
      else
      {
-       forkJoin(this.footballApiService.getAllCskaPlayers()).subscribe(data =>
+       forkJoin(this.footballApiService.getAllCskaPlayers(this.season)).subscribe(data =>
        {
          const allPlayers : Player[] = [].concat(...data);
 
@@ -37,21 +40,40 @@ export class CskaTeamComponent implements OnInit {
          console.log(allPlayers);
          this.players = allPlayers;
 
-         this.storage.setItem('players', JSON.stringify(allPlayers));
+         this.storage.setItem('players_' + this.season, JSON.stringify(allPlayers));
        });
-
-
-       // this.footballApiService.getAllCskaPlayers().subscribe(data => {
-       //   console.log('Getting all CSKA players');
-       //   console.log(JSON.stringify(data));
-       //   console.log(data);
-       //   this.players = data;
-       //
-       //   this.storage.setItem('players', JSON.stringify(data));
-       //
-       // });
-
      }
+   }
+
+  getSeasons(): void
+  {
+    const seasons = JSON.parse(this.storage.getItem('seasons'));
+    if(seasons != null)
+    {
+      this.seasons = seasons;
+      //this.season = this.seasons[this.seasons.length - 1];
+    }
+    else
+    {
+      this.footballApiService.getCskaSeasons().subscribe(data =>
+      {
+        console.log('CSKA Seasons: ' +  console.log(data));
+        this.seasons = data;
+        //this.season = this.seasons[this.seasons.length - 1];
+
+        this.storage.setItem('seasons', JSON.stringify(data));
+
+      });
+    }
+  }
+
+   changeSeason(seasonVal)
+   {
+
+       console.log('New value: ' + seasonVal);
+       this.season = seasonVal;
+       this.getPlayers();
+
    }
 
 }
