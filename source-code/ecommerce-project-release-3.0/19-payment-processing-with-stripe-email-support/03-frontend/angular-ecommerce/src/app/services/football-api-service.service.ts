@@ -17,7 +17,7 @@ export class FootballApiServiceService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAllCskaPlayers(season: number): Observable<Player[]>[] {
+  getAllCskaPlayers(season: number): Observable<Response[]>[] {
 
 
     return [this.getPlayers(this.url + '&season=' + season), this.getPlayers(this.url + '&season=' + season + '&page=2')];
@@ -37,7 +37,7 @@ export class FootballApiServiceService {
 
   }
 
-  private getPlayers(searchUrl: string): Observable<Player[]> {
+  private getPlayers(searchUrl: string): Observable<Response[]> {
     const headerDict = {
       'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com',
       'X-RapidAPI-Key': '22f70b951dmshe4a4e7b5adebd52p12cd5bjsne9c3eb8076f2'
@@ -47,7 +47,8 @@ export class FootballApiServiceService {
       headers: new HttpHeaders(headerDict),
     };
 
-    return this.httpClient.get<GetResponsePlayers>(searchUrl, requestOptions).pipe(map(x => x.response.map(y => y.player)));
+    //return this.httpClient.get<GetResponsePlayers>(searchUrl, requestOptions).pipe(map(x => x.response.map(y => y.player)));
+    return this.httpClient.get<GetResponsePlayers>(searchUrl, requestOptions).pipe(map(x => x.response));
 
   }
 
