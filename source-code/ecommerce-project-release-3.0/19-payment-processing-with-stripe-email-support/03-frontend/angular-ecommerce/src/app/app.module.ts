@@ -35,6 +35,8 @@ import { MembersPageComponent } from './components/members-page/members-page.com
 import { OrderHistoryComponent } from './components/order-history/order-history.component';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
 import { CskaTeamComponent } from './components/cska-team/cska-team.component';
+import { CskaPlayerComponent } from './components/cska-player/cska-player.component';
+import {CommonModule} from '@angular/common';
 
 const oktaConfig = Object.assign({
 
@@ -71,6 +73,7 @@ const routes: Routes = [
   {path: 'category', component: ProductListComponent},
   {path: 'products', component: ProductListComponent},
   {path: 'cska-team', component: CskaTeamComponent},
+  {path: 'cska-team/player/:id', component: CskaPlayerComponent},
   {path: '', redirectTo: '/products', pathMatch: 'full'},
   {path: '**', redirectTo: '/products', pathMatch: 'full'}
 ];
@@ -89,7 +92,8 @@ const routes: Routes = [
     LoginStatusComponent,
     MembersPageComponent,
     OrderHistoryComponent,
-    CskaTeamComponent
+    CskaTeamComponent,
+    CskaPlayerComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
@@ -97,7 +101,8 @@ const routes: Routes = [
     HttpClientModule,
     NgbModule,
     ReactiveFormsModule,
-    OktaAuthModule
+    OktaAuthModule,
+    CommonModule
   ],
   providers: [ProductService, { provide: OKTA_CONFIG, useValue: {oktaAuth} },
               {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],

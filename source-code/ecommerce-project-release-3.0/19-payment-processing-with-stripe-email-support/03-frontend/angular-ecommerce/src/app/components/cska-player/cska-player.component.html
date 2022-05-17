@@ -1,0 +1,63 @@
+<div class="detail-section">
+    <div class="container-fluid">
+
+
+        <div>
+            <img src="{{ player.photo }}" class="detail-img">
+            <h3>{{ player.name }}</h3>
+            <table class="table table-bordered">
+                <tr>
+                    <th >League</th>
+                    <th >Season</th>
+                    <th >Appearances</th>
+                    <th >Minutes</th>
+                    <th >Goals</th>
+                    <th >Assists</th>
+                    <th>Yellow Cards</th>
+                    <th >Red Cards</th>
+                </tr>
+
+                <tr *ngFor="let statistic of statics">
+                    <td>
+
+                        <p *ngIf="statistic.league.logo != null"><img src="{{ statistic.league.logo }}" class="img-responsive"/></p>
+                        <p *ngIf="statistic.league.logo == null">{{ statistic.league.name }}</p>
+
+                    </td>
+                    <td>
+                        <p>{{ season }}</p>
+                    </td>
+                    <td>
+                        <p>{{ statistic.games.appearences }}</p>
+                    </td>
+                    <td>
+                        <p>{{ statistic.games.minutes }}</p>
+                    </td>
+                    <td>
+                        <p>{{ statistic.goals.total }}</p>
+                    </td>
+                    <td>
+                        <p>{{ statistic.goals.assists }}</p>
+                    </td>
+                    <td>
+                        <p>{{ statistic.cards.yellow}}</p>
+                    </td>
+                    <td>
+                        <p>{{ statistic.cards.red }}</p>
+                    </td>
+
+                </tr>
+
+            </table>
+        </div>
+        <hr>
+        <h4>Description</h4>
+        <p>Nationality: {{ player.nationality }}</p>
+        <p>Age: {{ player.age }}</p>
+        <p>Birth: {{ player.birth.date }}</p>
+        <p>Height: {{ player.height }}</p>
+        <p>Weight: {{ player.weight }}</p>
+
+        <a routerLink="/cska-team" class="mt-5">Back to team {{season}}</a>
+    </div>
+</div>

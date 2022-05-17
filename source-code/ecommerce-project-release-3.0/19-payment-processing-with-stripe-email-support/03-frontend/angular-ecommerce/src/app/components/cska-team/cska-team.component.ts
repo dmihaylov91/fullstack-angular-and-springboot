@@ -52,9 +52,9 @@ export class CskaTeamComponent implements OnInit {
                     const allResponses: Response[] = [].concat(...data);
                     const allPlayers: Player[] = allResponses.map(y => y.player);
 
-                    const dictionary = Object.assign({}, ...allResponses.map((x) => ({[x.player.id]: x.statistics})));
-                    console.log(dictionary);
-                    this.storage.setItem('statistics', JSON.stringify(dictionary));
+                    const dictionaryStatistics = Object.assign({}, ...allResponses.map((x) => ({[x.player.id]: x.statistics})));
+                    console.log(dictionaryStatistics);
+                    this.storage.setItem('statistics_' + this.season, JSON.stringify(dictionaryStatistics));
 
                     console.log('All CSKA players retrieved');
                     console.log(JSON.stringify(allPlayers));
@@ -62,6 +62,9 @@ export class CskaTeamComponent implements OnInit {
 
                     this.players = allPlayers;
                     this.storage.setItem('players_' + this.season, JSON.stringify(allPlayers));
+
+                    const dictionaryPlayers = Object.assign({}, ...allPlayers.map((x) => ({[x.id]: x})));
+                    this.storage.setItem('players_dictionary_' + this.season, JSON.stringify(dictionaryPlayers));
 
 
                 }
@@ -82,16 +85,19 @@ export class CskaTeamComponent implements OnInit {
                 const allResponses: Response[] = [].concat(...data);
                 const allPlayers: Player[] = allResponses.map(y => y.player);
 
-                const dictionary = Object.assign({}, ...allResponses.map((x) => ({[x.player.id]: x.statistics})));
-                console.log(dictionary);
-                this.storage.setItem('statistics', JSON.stringify(dictionary));
+                const dictionaryStatistics = Object.assign({}, ...allResponses.map((x) => ({[x.player.id]: x.statistics})));
+                console.log(dictionaryStatistics);
+                this.storage.setItem('statistics_' + this.season, JSON.stringify(dictionaryStatistics));
 
                 console.log('Getting all CSKA players');
                 console.log(JSON.stringify(allPlayers));
                 console.log(allPlayers);
-                this.players = allPlayers;
 
+                this.players = allPlayers;
                 this.storage.setItem('players_' + this.season, JSON.stringify(allPlayers));
+
+                const dictionaryPlayers = Object.assign({}, ...allPlayers.map((x) => ({[x.id]: x})));
+                this.storage.setItem('players_dictionary_' + this.season, JSON.stringify(dictionaryPlayers));
             });
         }
     }
