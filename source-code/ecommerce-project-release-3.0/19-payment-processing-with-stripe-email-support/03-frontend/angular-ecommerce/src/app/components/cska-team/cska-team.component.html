@@ -5,8 +5,8 @@
         <div class="container-fluid">
             <div class="col-md-3">
                 <div class="input-space">
-                    <select (change)="changeSeason($event.target.value)">
-                        <option *ngFor="let s of seasons" [ngValue]="s" [selected]="s ===season">
+                    <select (change)="changeSeason($event.target.value)" [ngModel]="season">
+                        <option *ngFor="let s of seasons" [value]="s">
                             {{ s }}
                         </option>
                     </select>

@@ -15,7 +15,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CartStatusComponent } from './components/cart-status/cart-status.component';
 import { CartDetailsComponent } from './components/cart-details/cart-details.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { LoginComponent } from './components/login/login.component';
 import { LoginStatusComponent } from './components/login-status/login-status.component';
 
@@ -102,7 +102,8 @@ const routes: Routes = [
     NgbModule,
     ReactiveFormsModule,
     OktaAuthModule,
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   providers: [ProductService, { provide: OKTA_CONFIG, useValue: {oktaAuth} },
               {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
