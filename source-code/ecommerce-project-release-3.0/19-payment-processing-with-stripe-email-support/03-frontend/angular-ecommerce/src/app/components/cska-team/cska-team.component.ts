@@ -20,6 +20,7 @@ export class CskaTeamComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        console.log('initializing component cska-team...');
         this.getSeasonsAndPlayers();
     }
 
@@ -106,12 +107,12 @@ export class CskaTeamComponent implements OnInit {
         const seasons = JSON.parse(this.storage.getItem('seasons'));
         if (seasons != null) {
             this.seasons = seasons;
-            //this.season = this.seasons[this.seasons.length - 1];
+            // this.season = this.seasons[this.seasons.length - 1];
         } else {
             this.footballApiService.getCskaSeasons().subscribe(data => {
                 console.log('CSKA Seasons: ' + console.log(data));
                 this.seasons = data;
-                //this.season = this.seasons[this.seasons.length - 1];
+                // this.season = this.seasons[this.seasons.length - 1];
 
                 this.storage.setItem('seasons', JSON.stringify(data));
 
@@ -124,6 +125,10 @@ export class CskaTeamComponent implements OnInit {
         console.log('New value: ' + seasonVal);
         this.season = seasonVal;
         this.storage.setItem('season', JSON.stringify(this.season));
+
+        // set players to empty array that will be updated
+        // do this so that players are reset and loading message is displayed until players for newly selected season are loaded
+        this.players = [];
         this.getPlayers();
 
     }

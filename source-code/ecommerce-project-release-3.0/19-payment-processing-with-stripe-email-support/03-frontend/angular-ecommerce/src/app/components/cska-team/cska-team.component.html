@@ -14,28 +14,37 @@
             </div>
             <div class="row">
                 <!-- loop over the collection of products -->
-                <div *ngFor="let tempPlayer of players" class="col-md-3">
+                <ng-container *ngIf="players?.length > 0; else loading">
+                    <div *ngFor="let tempPlayer of players" class="col-md-3">
 
-                    <div class="product-box">
+                        <div class="product-box">
 
-                        <a routerLink="/cska-team/player/{{ tempPlayer.id }}">
-                            <img src="{{ tempPlayer.photo }}" class="img-responsive">
-                        </a>
+                            <a routerLink="/cska-team/player/{{ tempPlayer.id }}">
+                                <img src="{{ tempPlayer.photo }}" class="img-responsive">
+                            </a>
 
-                        <a routerLink="/cska-team/player/{{ tempPlayer.id }}">
-                            <h1>{{ tempPlayer.name }}</h1>
-                        </a>
+                            <a routerLink="/cska-team/player/{{ tempPlayer.id }}">
+                                <h1>{{ tempPlayer.name }}</h1>
+                            </a>
 
-<!--                        <div class="price">{{ tempProduct.unitPrice | currency:'USD' }}</div>-->
-<!--                        <button (click)="addToCart(tempProduct)" class="btn btn-primary btn-sm">Add to cart</button>-->
+                            <!--                        <div class="price">{{ tempProduct.unitPrice | currency:'USD' }}</div>-->
+                            <!--                        <button (click)="addToCart(tempProduct)" class="btn btn-primary btn-sm">Add to cart</button>-->
+                        </div>
+
                     </div>
+                </ng-container>
 
-                </div>
+                <ng-template #loading>
+                    <button class="btn btn-primary" type="button" disabled>
+                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                        Loading CSKA players...
+                    </button>
+                </ng-template>
 
                 <!-- if products empty then display a message-->
-                <div *ngIf="players?.length == 0" class="alert alert-warning col-md-12" role="alert">
-                    No players found.
-                </div>
+<!--                <div *ngIf="players?.length == 0" class="alert alert-warning col-md-12" role="alert">-->
+<!--                    No players found.-->
+<!--                </div>-->
 
             </div>
 
