@@ -1,0 +1,29 @@
+#version: '3.8'
+
+services:
+  backend:
+    image: localhost/spring-boot-ecommerce:latest   # Replace with your backend image name
+    container_name: spring-boot-ecommerce
+    ports:
+      - "8080:8080"   # Expose backend port to the host
+      - "8443:8443"   # Expose secure backend port to the host (if needed)
+    environment:
+      - DB_URL=${DB_URL}   # Pass environment variables, or set defaults in .env file
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    networks:
+      - ecommerce-network
+
+  frontend:
+    image: localhost/angular-ecommerce:latest   # Replace with your frontend image name
+    container_name: angular-ecommerce
+    ports:
+      - "4200:4200"   # Expose frontend port to the host
+    networks:
+      - ecommerce-network
+    depends_on:
+      - backend   # Ensure backend is ready before starting the frontend
+
+networks:
+  ecommerce-network:
+    driver: bridge
