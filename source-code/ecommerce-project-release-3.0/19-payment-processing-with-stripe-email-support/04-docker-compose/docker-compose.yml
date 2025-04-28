@@ -1,8 +1,11 @@
-#version: '3.8'
+version: '3.8'
 
 services:
   backend:
-    image: localhost/spring-boot-ecommerce:latest   # Replace with your backend image name
+    build:
+      context: ../02-backend/spring-boot-ecommerce  # Path to the backend directory
+      dockerfile: Dockerfile  # If the Dockerfile is named differently, specify the correct name
+    image: localhost/spring-boot-ecommerce:latest   # This will tag the built image
     container_name: spring-boot-ecommerce
     ports:
       - "8080:8080"   # Expose backend port to the host
@@ -13,9 +16,17 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
     networks:
       - ecommerce-network
+    depends_on:
+      mysql:   # Ensure mysql is ready before starting the frontend
+        condition: service_healthy
+
+
 
   frontend:
-    image: localhost/angular-ecommerce:latest   # Replace with your frontend image name
+    build:
+      context: ../03-frontend/angular-ecommerce  # Path to the frontend directory
+      dockerfile: Dockerfile  # If the Dockerfile is named differently, specify the correct name
+    image: localhost/angular-ecommerce:latest   # This will tag the built image
     container_name: angular-ecommerce
     ports:
       - "4200:4200"   # Expose frontend port to the host
@@ -23,6 +34,27 @@ services:
       - ecommerce-network
     depends_on:
       - backend   # Ensure backend is ready before starting the frontend
+
+  mysql:
+    image: mysql:8.0.38
+    container_name: ecommerce-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678   # Set root password for MySQL
+      #MYSQL_DATABASE: ecommerce_db     # Set default database
+    volumes:
+      - /Users/dimitarmihaylov/IBM/mysql-8.0.30-config-ecommerce:/etc/mysql/conf.d:rw,rprivate,rbind  # Configuration files
+      - /Users/dimitarmihaylov/IBM/mysql-8.0.30_data-ecommerce:/var/lib/mysql:rw,rprivate,rbind   # Data storage
+    ports:
+      - "5506:3306"   # Map host port 5506 to container port 3306 (MySQL default)
+      - "55060:33060" # Map host port 55060 to container port 33060 (MySQL admin tool)
+    networks:
+      - ecommerce-network
+    restart: unless-stopped   # Option to restart the container automatically if it stops unexpectedly
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 networks:
   ecommerce-network:
