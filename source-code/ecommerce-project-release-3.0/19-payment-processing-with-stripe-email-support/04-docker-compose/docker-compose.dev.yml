@@ -1,0 +1,33 @@
+#To run it use
+#docker-compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml up
+#docker-compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml up --build for build
+
+#Extend docker-compose.yml: Add mysql service and add dependency to backend service
+
+version: '3.8'
+
+services:
+  backend:
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.0.38
+    container_name: ecommerce-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+    volumes:
+      - ${MYSQL_CONFIG_PATH}:/etc/mysql/conf.d:rw,rprivate,rbind
+      - ${MYSQL_DATA_PATH}:/var/lib/mysql:rw,rprivate,rbind
+    ports:
+      - "5506:3306"
+      - "55060:33060"
+    networks:
+      - ecommerce-network
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10

@@ -1,0 +1,4 @@
+#To run it use
+#docker-compose --env-file .env.prod -f docker-compose.yml -f docker-compose.prod.yml up
+#docker-compose --env-file .env.prod -f docker-compose.yml -f docker-compose.prod.yml up --build for build
+version: '3.8'

@@ -1,3 +1,6 @@
+#This is base docker-compose file it will be overridden by other compose files.
+#Run dev/test/prod as instructed in the file with the appropriate .env.dev/test/prod file
+
 version: '3.8'
 
 services:
@@ -14,13 +17,9 @@ services:
       - DB_URL=${DB_URL}   # Pass environment variables, or set defaults in .env file
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-dev}
     networks:
       - ecommerce-network
-    depends_on:
-      mysql:   # Ensure mysql is ready before starting the frontend
-        condition: service_healthy
-
-
 
   frontend:
     build:
@@ -35,27 +34,9 @@ services:
     depends_on:
       - backend   # Ensure backend is ready before starting the frontend
 
-  mysql:
-    image: mysql:8.0.38
-    container_name: ecommerce-mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: 12345678   # Set root password for MySQL
-      #MYSQL_DATABASE: ecommerce_db     # Set default database
-    volumes:
-      - /Users/dimitarmihaylov/IBM/mysql-8.0.30-config-ecommerce:/etc/mysql/conf.d:rw,rprivate,rbind  # Configuration files
-      - /Users/dimitarmihaylov/IBM/mysql-8.0.30_data-ecommerce:/var/lib/mysql:rw,rprivate,rbind   # Data storage
-    ports:
-      - "5506:3306"   # Map host port 5506 to container port 3306 (MySQL default)
-      - "55060:33060" # Map host port 55060 to container port 33060 (MySQL admin tool)
-    networks:
-      - ecommerce-network
-    restart: unless-stopped   # Option to restart the container automatically if it stops unexpectedly
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 5s
-      timeout: 5s
-      retries: 10
 
 networks:
   ecommerce-network:
     driver: bridge
+
+
