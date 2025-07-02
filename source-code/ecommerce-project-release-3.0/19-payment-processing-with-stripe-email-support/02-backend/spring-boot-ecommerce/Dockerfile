@@ -78,6 +78,9 @@ FROM openjdk:11-jre-slim
 
 WORKDIR /app
 
+# Install curl for health check
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 # Copy each layer from the build stage
 #Dependencies, snapshot code, and application code are layered separately for faster rebuilds
 COPY --from=build /app/dependencies/ ./
