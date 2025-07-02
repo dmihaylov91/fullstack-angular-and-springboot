@@ -1,81 +1,84 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
 
-import { AppComponent } from './app.component';
-import { ProductListComponent } from './components/product-list/product-list.component';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ProductService } from './services/product.service';
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
+import { AppComponent } from "./app.component";
+import { ProductListComponent } from "./components/product-list/product-list.component";
+import { ProductService } from "./services/product.service";
 
-import { Routes, RouterModule, Router} from '@angular/router';
-import { ProductCategoryMenuComponent } from './components/product-category-menu/product-category-menu.component';
-import { SearchComponent } from './components/search/search.component';
-import { ProductDetailsComponent } from './components/product-details/product-details.component';
+import { Router, RouterModule, Routes } from "@angular/router";
+import { ProductCategoryMenuComponent } from "./components/product-category-menu/product-category-menu.component";
+import { ProductDetailsComponent } from "./components/product-details/product-details.component";
+import { SearchComponent } from "./components/search/search.component";
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { CartStatusComponent } from './components/cart-status/cart-status.component';
-import { CartDetailsComponent } from './components/cart-details/cart-details.component';
-import { CheckoutComponent } from './components/checkout/checkout.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { LoginComponent } from './components/login/login.component';
-import { LoginStatusComponent } from './components/login-status/login-status.component';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { CartDetailsComponent } from "./components/cart-details/cart-details.component";
+import { CartStatusComponent } from "./components/cart-status/cart-status.component";
+import { CheckoutComponent } from "./components/checkout/checkout.component";
+import { LoginStatusComponent } from "./components/login-status/login-status.component";
+import { LoginComponent } from "./components/login/login.component";
 
-import { OktaAuth } from '@okta/okta-auth-js';
-
-
+import { OktaAuth } from "@okta/okta-auth-js";
 
 import {
   OKTA_CONFIG,
+  OktaAuthGuard,
   OktaAuthModule,
   OktaCallbackComponent,
-  OktaAuthGuard
-} from '@okta/okta-angular';
+} from "@okta/okta-angular";
 
-import myAppConfig from './config/my-app-config';
-import { MembersPageComponent } from './components/members-page/members-page.component';
-import { OrderHistoryComponent } from './components/order-history/order-history.component';
-import { AuthInterceptorService } from './services/auth-interceptor.service';
-import { CskaTeamComponent } from './components/cska-team/cska-team.component';
-import { CskaPlayerComponent } from './components/cska-player/cska-player.component';
-import {CommonModule} from '@angular/common';
+import { CommonModule } from "@angular/common";
+import { CskaPlayerComponent } from "./components/cska-player/cska-player.component";
+import { CskaTeamComponent } from "./components/cska-team/cska-team.component";
+import { ImageUploadComponent } from "./components/image-upload/image-upload.component";
+import { MembersPageComponent } from "./components/members-page/members-page.component";
+import { OrderHistoryComponent } from "./components/order-history/order-history.component";
+import myAppConfig from "./config/my-app-config";
+import { AuthInterceptorService } from "./services/auth-interceptor.service";
 
-const oktaConfig = Object.assign({
+const oktaConfig = Object.assign(
+  {
+    onAuthRequired: (injector) => {
+      const router = injector.get(Router);
 
-  onAuthRequired: (injector) => {
+      // Redirect the user to your custom login page
 
-    const router = injector.get(Router);
-
-
-
-    // Redirect the user to your custom login page
-
-    router.navigate(['/login']);
-
-  }
-
-}, myAppConfig.oidc);
+      router.navigate(["/login"]);
+    },
+  },
+  myAppConfig.oidc
+);
 
 const oktaAuth = new OktaAuth(oktaConfig);
 
-
-
 const routes: Routes = [
-  {path: 'order-history', component: OrderHistoryComponent, canActivate: [ OktaAuthGuard ]},
-  {path: 'members', component: MembersPageComponent, canActivate: [ OktaAuthGuard ]},
+  {
+    path: "order-history",
+    component: OrderHistoryComponent,
+    canActivate: [OktaAuthGuard],
+  },
+  {
+    path: "members",
+    component: MembersPageComponent,
+    canActivate: [OktaAuthGuard],
+  },
 
-  {path: 'login/callback', component: OktaCallbackComponent},
-  {path: 'login', component: LoginComponent},
+  { path: "login/callback", component: OktaCallbackComponent },
+  { path: "login", component: LoginComponent },
 
-  {path: 'checkout', component: CheckoutComponent},
-  {path: 'cart-details', component: CartDetailsComponent},
-  {path: 'products/:id', component: ProductDetailsComponent},
-  {path: 'search/:keyword', component: ProductListComponent},
-  {path: 'category/:id', component: ProductListComponent},
-  {path: 'category', component: ProductListComponent},
-  {path: 'products', component: ProductListComponent},
-  {path: 'cska-team', component: CskaTeamComponent},
-  {path: 'cska-team/player/:id', component: CskaPlayerComponent},
-  {path: '', redirectTo: '/products', pathMatch: 'full'},
-  {path: '**', redirectTo: '/products', pathMatch: 'full'}
+  { path: "checkout", component: CheckoutComponent },
+  { path: "cart-details", component: CartDetailsComponent },
+  { path: "products/:id", component: ProductDetailsComponent },
+  { path: "search/:keyword", component: ProductListComponent },
+  { path: "category/:id", component: ProductListComponent },
+  { path: "category", component: ProductListComponent },
+  { path: "products", component: ProductListComponent },
+  { path: "cska-team", component: CskaTeamComponent },
+  { path: "cska-team/player/:id", component: CskaPlayerComponent },
+  { path: "image-upload", component: ImageUploadComponent },
+  { path: "", redirectTo: "/products", pathMatch: "full" },
+  { path: "**", redirectTo: "/products", pathMatch: "full" },
 ];
 
 @NgModule({
@@ -93,7 +96,7 @@ const routes: Routes = [
     MembersPageComponent,
     OrderHistoryComponent,
     CskaTeamComponent,
-    CskaPlayerComponent
+    CskaPlayerComponent,
   ],
   imports: [
     RouterModule.forRoot(routes),
@@ -103,10 +106,17 @@ const routes: Routes = [
     ReactiveFormsModule,
     OktaAuthModule,
     CommonModule,
-    FormsModule
+    FormsModule,
   ],
-  providers: [ProductService, { provide: OKTA_CONFIG, useValue: {oktaAuth} },
-              {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
-  bootstrap: [AppComponent]
+  providers: [
+    ProductService,
+    { provide: OKTA_CONFIG, useValue: { oktaAuth } },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
