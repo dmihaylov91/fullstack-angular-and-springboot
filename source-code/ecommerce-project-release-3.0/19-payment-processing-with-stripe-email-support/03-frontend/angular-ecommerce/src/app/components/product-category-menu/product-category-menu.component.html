@@ -1,22 +1,25 @@
 <div class="menu-sidebar-content js-scrollbar1">
-    <nav class="navbar-sidebar">
-        <ul class="list-unstyled navbar-list">
+  <nav class="navbar-sidebar">
+    <ul class="list-unstyled navbar-list">
+      <li *ngFor="let tempProductCategory of productCategories">
+        <a
+          routerLink="/category/{{ tempProductCategory.id }}"
+          routerLinkActive="active-link"
+        >
+          {{ tempProductCategory.categoryName }}
+        </a>
+      </li>
+      <li>
+        <a routerLink="/cska-team" routerLinkActive="active-link">
+          CSKA Team
+        </a>
+      </li>
 
-            <li *ngFor="let tempProductCategory of productCategories">
-
-                <a routerLink="/category/{{ tempProductCategory.id }}" routerLinkActive="active-link">
-                    {{ tempProductCategory.categoryName }}
-                </a>
-
-            </li>
-            <li>
-
-                <a routerLink="/cska-team" routerLinkActive="active-link">
-                    CSKA Team
-                </a>
-
-            </li>
-        
-        </ul>
-    </nav>
+      <li>
+        <a routerLink="/image-upload" routerLinkActive="active-link">
+          Image Upload
+        </a>
+      </li>
+    </ul>
+  </nav>
 </div>
